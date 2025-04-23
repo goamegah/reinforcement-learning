@@ -1,0 +1,14 @@
+Résultats impressionants :
+- https://en.wikipedia.org/wiki/TD-Gammon
+- https://arxiv.org/abs/1312.5602
+- https://www.deepmind.com/blog/alphago-zero-starting-from-scratch
+- https://openai.com/five/
+- https://openai.com/blog/solving-rubiks-cube/
+- https://www.deepmind.com/blog/alphafold-a-solution-to-a-50-year-old-grand-challenge-in-biology
+- https://www.deepmind.com/blog/muzeros-first-step-from-research-into-the-real-world
+- https://www.deepmind.com/blog/accelerating-fusion-science-through-learned-plasma-control
+
+Frameworks de comparaison de résultats et d'entrainement :
+- https://gymnasium.farama.org/
+- https://docs.ray.io/en/latest/rllib/index.html
+- https://github.com/Unity-Technologies/ml-agents
