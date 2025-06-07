@@ -20,6 +20,10 @@ from rlearn.algorithms.mc.mc_exploring_starts import mc_exploring_starts
 from rlearn.algorithms.td.q_learning import q_learning
 from rlearn.algorithms.td.sarsa import sarsa
 from rlearn.algorithms.td.expected_sarsa import expected_sarsa
+# -- Planning
+from rlearn.algorithms.dyna.dyna_q_plus import dyna_q_plus
+from rlearn.algorithms.dyna.dyna_q import dyna_q
+
 
 # === Utils ===
 from rlearn.utils.io_utils import (
@@ -57,9 +61,10 @@ def main():
         choices=[
             "policy_iteration", "value_iteration",
             "mc_on", "mc_off", "mc_es",
-            "q_learning", "sarsa", "expected_sarsa"
+            "q_learning", "sarsa", "expected_sarsa",
+            "dyna_q", "dyna_q_plus"
         ],
-        default="mc_on",
+        default="dyna_q_plus",
         #required=True
     )
     parser.add_argument("--episodes", type=int, default=3000)
@@ -144,6 +149,26 @@ def main():
         save_scores(scores, f"{out_dir}/scores.npy")
         save_q_table(Q, f"{out_dir}/q_table.pkl")
         plot_scores(scores, title="Expected SARSA")
+
+    elif args.algo == "dyna_q":
+        policy, Q, scores = dyna_q(
+            env, gamma=args.gamma, alpha=args.alpha,
+            epsilon=args.epsilon, nb_episodes=args.episodes
+        )
+        save_policy(policy, f"{out_dir}/policy.json")
+        save_scores(scores, f"{out_dir}/scores.npy")
+        save_q_table(Q, f"{out_dir}/q_table.pkl")
+        plot_scores(scores, title="Dyna-Q")
+
+    elif args.algo == "dyna_q_plus":
+        policy, Q, scores = dyna_q_plus(
+            env, gamma=args.gamma, alpha=args.alpha,
+            epsilon=args.epsilon, nb_episodes=args.episodes
+        )
+        save_policy(policy, f"{out_dir}/policy.json")
+        save_scores(scores, f"{out_dir}/scores.npy")
+        save_q_table(Q, f"{out_dir}/q_table.pkl")
+        plot_scores(scores, title="Dyna-Q+")
 
     print("[OK] Terminé. Résultats enregistrés dans :", out_dir)
 
