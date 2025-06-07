@@ -173,4 +173,6 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-rf-learn/
+
+
+ressources/
