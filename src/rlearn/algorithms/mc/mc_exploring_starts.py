@@ -111,7 +111,7 @@ def plot_scores(scores, window=100, title="MC Exploring Starts - Scores"):
 #         env.reset()
 #         state = env.state_id()
 
-#         # ⚠️ Initialisation (Exploring Starts) : choisir (s0, a0) aléatoirement
+#         # @@ Initialisation (Exploring Starts) : choisir (s0, a0) aléatoirement
 #         valid_actions = env.available_actions()
 #         action = np.random.choice(valid_actions)
 #         episode = [(state, action)]
@@ -132,7 +132,7 @@ def plot_scores(scores, window=100, title="MC Exploring Starts - Scores"):
 #             episode.append((state, action))
 #             env.step(action)
 
-#         # 🎯 Calcul du retour G avec gamma
+#         # @@ Calcul du retour G avec gamma
 #         G = 0.0
 #         visited = set()
 #         for t, (s, a) in enumerate(reversed(episode)):
