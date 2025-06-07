@@ -6,7 +6,7 @@ def render_grid_world(agent_pos, size, terminal_states, done=False, score=0.0):
         agent_pos (tuple): position actuelle de l'agent (row, col)
         size (int): taille de la grille (size x size)
         terminal_states (dict): {(row, col): reward}
-        done (bool): si l’épisode est terminé
+        done (bool): si l'épisode est terminé
         score (float): score final (si terminé)
     """
     print("\n=== GridWorld ===")
@@ -25,4 +25,4 @@ def render_grid_world(agent_pos, size, terminal_states, done=False, score=0.0):
         print(line)
 
     if done:
-        print(f"\n🎯 Épisode terminé. Score final : {score}")
+        print(f"\n@@ Épisode terminé. Score final : {score}")

@@ -10,10 +10,10 @@ def policy_evaluation(env, policy, gamma=0.99, theta=1e-6, max_iterations=1000, 
     Évalue une politique donnée pour un environnement MDP compatible.
     :param env: Environnement avec p(s,a,s',r), num_states, num_actions, etc.
     :param policy: tableau [s] -> a (politique à évaluer)
-    :param gamma: facteur d’actualisation
-    :param theta: seuil pour l’arrêt de la convergence
-    :param max_iterations: nombre maximal d’itérations
-    :param verbose: si True, affiche l’évolution des erreurs
+    :param gamma: facteur d'actualisation
+    :param theta: seuil pour l'arrêt de la convergence
+    :param max_iterations: nombre maximal d'itérations
+    :param verbose: si True, affiche l'évolution des erreurs
     :return: V (valeurs), history (liste des erreurs à chaque itération)
     """
     V = np.zeros(env.num_states())

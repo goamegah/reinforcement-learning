@@ -145,7 +145,7 @@ def main():
         save_q_table(Q, f"{out_dir}/q_table.pkl")
         plot_scores(scores, title="Expected SARSA")
 
-    print("✅ Terminé. Résultats enregistrés dans :", out_dir)
+    print("[OK] Terminé. Résultats enregistrés dans :", out_dir)
 
 
 if __name__ == "__main__":

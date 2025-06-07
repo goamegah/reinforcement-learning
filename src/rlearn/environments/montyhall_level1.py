@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
     while not env.is_game_over():
         env.display()
-        action = int(input(f"Action ? ({env.available_actions().tolist()}) : "))
+        action = int(input(f"[INST] Action ? ({env.available_actions().tolist()}) : "))
         env.step(action)
 
     env.display()

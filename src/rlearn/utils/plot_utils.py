@@ -9,7 +9,7 @@ def plot_scores(scores, window=100, title="Performance", save=False, save_path=N
     :param scores: liste des scores bruts
     :param window: taille de la fenêtre pour la moyenne mobile
     :param title: titre du graphique
-    :param save: True = enregistrer au lieu d’afficher
+    :param save: True = enregistrer au lieu d'afficher
     :param save_path: chemin du fichier PNG si save=True
     """
     if len(scores) >= window:
@@ -31,6 +31,6 @@ def plot_scores(scores, window=100, title="Performance", save=False, save_path=N
         os.makedirs(os.path.dirname(save_path), exist_ok=True)
         plt.savefig(save_path)
         plt.close()
-        print(f"✅ Graphique enregistré : {save_path}")
+        print(f"[OK] Graphique enregistré : {save_path}")
     else:
         plt.show()

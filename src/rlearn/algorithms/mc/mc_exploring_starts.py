@@ -1,7 +1,4 @@
-# rlearn/algorithms/mc/mc_exploring_starts.py
-
-
-
+# -*- coding: utf-8 -*-
 # rlearn/algorithms/mc/mc_exploring_starts.py
 
 import numpy as np
@@ -14,8 +11,8 @@ def mc_exploring_starts(env, gamma=0.99, nb_episodes=5000, epsilon=0.1):
     """
     Monte Carlo Exploring Starts : apprentissage d'une politique optimale par estimation de Q(s,a)
     :param env: environnement compatible
-    :param gamma: facteur d’actualisation
-    :param nb_episodes: nombre d’épisodes
+    :param gamma: facteur d'actualisation
+    :param nb_episodes: nombre d'épisodes
     :param epsilon: exploration aléatoire
     :return: politique, Q, historique des scores
     """
@@ -27,7 +24,7 @@ def mc_exploring_starts(env, gamma=0.99, nb_episodes=5000, epsilon=0.1):
         env.reset()
         state = env.state_id()
 
-        # ⚠️ Initialisation (Exploring Starts) : choisir (s0, a0) aléatoirement
+        # @@ Initialisation (Exploring Starts) : choisir (s0, a0) aléatoirement
         valid_actions = env.available_actions()
         action = np.random.choice(valid_actions)
         episode = [(state, action)]
@@ -50,7 +47,7 @@ def mc_exploring_starts(env, gamma=0.99, nb_episodes=5000, epsilon=0.1):
             episode.append((state, action))
             env.step(action)
 
-        # 🎯 Calcul du retour G avec gamma
+        # @@ Calcul du retour G avec gamma
         G = 0.0
         visited = set()
         for t, (s, a) in enumerate(reversed(episode)):

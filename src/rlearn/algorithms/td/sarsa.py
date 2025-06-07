@@ -8,12 +8,14 @@ def sarsa(env, nb_episodes=5000, gamma=0.99, alpha=0.1, epsilon=0.1):
     """
     Algorithme SARSA (on-policy TD control).
     :param env: environnement compatible
-    :param nb_episodes: nombre d’épisodes
+    :param nb_episodes: nombre d'épisodes
     :param gamma: facteur de discount
-    :param alpha: taux d’apprentissage
+    :param alpha: taux d'apprentissage
     :param epsilon: exploration ε-greedy
     :return: policy, Q, scores
     """
+    # Initialisation de la table Q
+    # Q[s][a] = valeur de l'action a dans l'état s
     Q = defaultdict(lambda: np.zeros(env.num_actions()))
     scores = []
 

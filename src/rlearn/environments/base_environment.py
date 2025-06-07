@@ -10,12 +10,12 @@ class BaseEnvironment(ABC):
     # --- MDP related Methods ---
     @abstractmethod
     def num_states(self) -> int:
-        """Retourne le nombre total d’états dans l’environnement."""
+        """Retourne le nombre total d'états dans l'environnement."""
         pass
 
     @abstractmethod
     def num_actions(self) -> int:
-        """Retourne le nombre total d’actions possibles."""
+        """Retourne le nombre total d'actions possibles."""
         pass
 
     @abstractmethod
@@ -36,17 +36,17 @@ class BaseEnvironment(ABC):
     # --- Monte Carlo and TD Methods ---
     @abstractmethod
     def state_id(self) -> int:
-        """Retourne l’identifiant unique de l’état courant."""
+        """Retourne l'identifiant unique de l'état courant."""
         pass
 
     @abstractmethod
     def reset(self) -> None:
-        """Réinitialise l’environnement."""
+        """Réinitialise l'environnement."""
         pass
 
     @abstractmethod
     def display(self) -> None:
-        """Affiche l’environnement à l’état courant (console ou GUI)."""
+        """Affiche l'environnement à l'état courant (console ou GUI)."""
         pass
 
     @abstractmethod
@@ -59,7 +59,7 @@ class BaseEnvironment(ABC):
 
     @abstractmethod
     def is_game_over(self) -> bool:
-        """Retourne True si l’épisode est terminé."""
+        """Retourne True si l'épisode est terminé."""
         pass
 
     @abstractmethod
@@ -74,5 +74,5 @@ class BaseEnvironment(ABC):
 
     @abstractmethod
     def score(self) -> float:
-        """Retourne le score global de l’épisode (utile à la fin du jeu)."""
+        """Retourne le score global de l'épisode (utile à la fin du jeu)."""
         pass

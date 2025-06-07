@@ -102,12 +102,12 @@ if __name__ == "__main__":
     while not env.is_game_over():
         env.display()
         try:
-            action = int(input("Ton choix (0=Rock, 1=Paper, 2=Scissors) : "))
+            action = int(input("[INST] Ton choix (0=Rock, 1=Paper, 2=Scissors) : "))
         except ValueError:
-            print("❌ Entrée invalide.")
+            print("/!\ Entrée invalide.")
             continue
         if env.is_forbidden(action):
-            print("❌ Action interdite.")
+            print("/!\ Action interdite.")
             continue
         env.step(action)
 

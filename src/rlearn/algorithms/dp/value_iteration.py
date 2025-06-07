@@ -10,7 +10,7 @@ def value_iteration(env, gamma=0.99, theta=1e-6, max_iterations=1000, verbose=Fa
     :param env: environnement MDP
     :param gamma: facteur d'actualisation
     :param theta: seuil de convergence
-    :param max_iterations: nombre max d’itérations
+    :param max_iterations: nombre max d'itérations
     :param verbose: si True, affiche les détails
     :return: politique optimale, valeurs V, historique des scores
     """

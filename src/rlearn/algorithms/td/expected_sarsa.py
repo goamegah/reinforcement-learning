@@ -4,6 +4,18 @@ from tqdm import tqdm
 from collections import defaultdict
 
 def expected_sarsa(env, nb_episodes=5000, gamma=0.99, alpha=0.1, epsilon=0.1):
+    """
+    Expected SARSA algorithm for reinforcement learning.
+    This algorithm learns the action-value function Q(s, a) and derives a policy from it.
+    :param env: Environment compatible with the expected SARSA algorithm
+    :param nb_episodes: Number of episodes to simulate
+    :param gamma: Discount factor
+    :param alpha: Learning rate
+    :param epsilon: Exploration rate for ε-greedy policy
+    :return: policy, Q, scores
+    """
+    # Initialize Q(s, a) for all states and actions
+    # Using defaultdict to handle states not seen yet
     Q = defaultdict(lambda: np.zeros(env.num_actions()))
     scores = []
 

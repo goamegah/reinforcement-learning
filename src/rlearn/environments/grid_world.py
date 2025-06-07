@@ -108,8 +108,8 @@ if __name__ == "__main__":
     env.reset()
     while not env.is_game_over():
         env.display()
-        action = int(input("Action (0=haut, 1=bas, 2=gauche, 3=droite) ? "))
+        action = int(input("[INST] Action (0=haut, 1=bas, 2=gauche, 3=droite) ? "))
         env.step(action)
     env.display()
-    print(f"Score final : {env.score()}")
+    print(f"$$ Score final : {env.score()}")
 

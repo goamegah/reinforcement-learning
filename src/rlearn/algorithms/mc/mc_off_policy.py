@@ -11,7 +11,7 @@ def mc_off_policy_control(env, nb_episodes=5000, gamma=0.99, epsilon=0.1, weight
     Contrôle Monte Carlo Hors-Politique (Off-policy) avec importance sampling.
     Apprend Q et en déduit une politique optimale.
     :param env: Environnement compatible
-    :param nb_episodes: nombre d’épisodes à simuler
+    :param nb_episodes: nombre d'épisodes à simuler
     :param gamma: facteur de réduction (discount)
     :param epsilon: exploration de la behavior policy (ε-greedy)
     :param weighted: True = Weighted IS, False = Ordinary IS
@@ -44,7 +44,7 @@ def mc_off_policy_control(env, nb_episodes=5000, gamma=0.99, epsilon=0.1, weight
 
         scores.append(env.score())
 
-        # 🎯 Calcul du retour G avec gamma
+        # @@ Calcul du retour G avec gamma
         G = 0.0
         W = 1.0
         for t in reversed(range(len(episode))):

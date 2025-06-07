@@ -41,7 +41,7 @@ def mc_on_policy_first_visit(env, gamma=0.99, nb_episodes=5000, epsilon=0.1):
             episode.append((s, a))
             env.step(a)
 
-        # 🎯 Calcul du retour G avec discount
+        # @@ Calcul du retour G avec discount
         G = 0.0
         visited = set()
         for t in reversed(range(len(episode))):

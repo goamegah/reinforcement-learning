@@ -107,7 +107,7 @@ if __name__ == "__main__":
         except ValueError:
             continue
         if env.is_forbidden(action):
-            print("❌ Action interdite.")
+            print("/!\ Action interdite.")
             continue
         env.step(action)
 

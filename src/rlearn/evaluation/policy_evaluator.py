@@ -47,7 +47,7 @@ def print_score_summary(scores):
     """
     Affiche les statistiques de base des scores.
     """
-    print(f"📊 Moyenne : {np.mean(scores):.2f}")
-    print(f"🔁 Écart-type : {np.std(scores):.2f}")
-    print(f"🔺 Max : {np.max(scores)}")
-    print(f"🔻 Min : {np.min(scores)}")
+    print(f"* Moyenne : {np.mean(scores):.2f}")
+    print(f"* Écart-type : {np.std(scores):.2f}")
+    print(f"* Max : {np.max(scores)}")
+    print(f"* Min : {np.min(scores)}")

@@ -63,6 +63,8 @@ class LineWorldMDP(BaseEnvironment):
             return 1
         if action == 1 and self.current_pos == self.terminal_right:
             return 1
+        if action not in [0, 1]:
+            return 1
         return 0
 
     def is_game_over(self) -> bool:
@@ -102,7 +104,7 @@ if __name__ == "__main__":
             print("Entrée invalide.")
             continue
         if env.is_forbidden(action):
-            print("❌ Action interdite (mur)")
+            print("/!\ Action interdite (mur)")
             continue
         env.step(action)
 
