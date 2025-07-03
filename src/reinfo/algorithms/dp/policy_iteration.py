@@ -4,7 +4,7 @@
 
 import numpy as np
 from tqdm import tqdm
-from rlearn.algorithms.dp.policy_evaluation import policy_evaluation
+from reinfo.algorithms.dp.policy_evaluation import policy_evaluation
 
 
 def policy_iteration(env, gamma=0.99, theta=1e-6, max_iterations=1000, verbose=False):

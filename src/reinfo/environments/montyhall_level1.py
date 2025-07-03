@@ -1,7 +1,7 @@
 
 # rlearn/environments/montyhall_level1.py
 import numpy as np
-from rlearn.environments.base_environment import BaseEnvironment
+from reinfo.environments.base_environment import BaseEnvironment
 
 class MontyHallLevel1MDP(BaseEnvironment):
     def __init__(self):
@@ -75,7 +75,7 @@ class MontyHallLevel1MDP(BaseEnvironment):
             self._is_done = True
 
     def display(self) -> None:
-        from rlearn.display.display_monty import render_montyhall_round
+        from reinfo.display.display_monty import render_montyhall_round
         render_montyhall_round(self.phase, self.first_choice, self.revealed_door, self.second_choice, self._score, self._is_done)
 
     def score(self) -> float:

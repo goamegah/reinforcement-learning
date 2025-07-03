@@ -1,7 +1,7 @@
 
 # rlearn/environments/rock_paper_scissors.py
 import numpy as np
-from rlearn.environments.base_environment import BaseEnvironment
+from reinfo.environments.base_environment import BaseEnvironment
 
 class RockPaperScissorsMDP(BaseEnvironment):
     def __init__(self):
@@ -70,7 +70,7 @@ class RockPaperScissorsMDP(BaseEnvironment):
         self._is_done = True
 
     def display(self) -> None:
-        from rlearn.display.display_rps import render_rps_round
+        from reinfo.display.display_rps import render_rps_round
         render_rps_round(self.player_action, self.opponent_action, self._score)
 
     def score(self) -> float:

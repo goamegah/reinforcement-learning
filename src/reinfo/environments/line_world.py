@@ -1,7 +1,7 @@
 
 # rlearn/environments/line_world.py
 import numpy as np
-from rlearn.environments.base_environment import BaseEnvironment
+from reinfo.environments.base_environment import BaseEnvironment
 
 class LineWorldMDP(BaseEnvironment):
     def __init__(self, size: int = 5):
@@ -54,7 +54,7 @@ class LineWorldMDP(BaseEnvironment):
         self._score = 0.0
 
     def display(self) -> None:
-        from rlearn.display.display_line import render_line_world  # import local
+        from reinfo.display.display_line import render_line_world  # import local
         render_line_world(self.current_pos, self.size, self._is_done, self._score)
 
 

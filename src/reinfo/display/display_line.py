@@ -1,6 +1,6 @@
 import os
 import time
-from rlearn.environments.line_world import LineWorldMDP
+from reinfo.environments.line_world import LineWorldMDP
 
 def clear_console():
     """Nettoie la console selon l'OS."""

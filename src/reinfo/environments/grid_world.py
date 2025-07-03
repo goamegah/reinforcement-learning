@@ -1,7 +1,7 @@
 
 # rlearn/environments/grid_world.py
 import numpy as np
-from rlearn.environments.base_environment import BaseEnvironment
+from reinfo.environments.base_environment import BaseEnvironment
 
 class GridWorldMDP(BaseEnvironment):
     def __init__(self, size: int = 5):
@@ -96,7 +96,7 @@ class GridWorldMDP(BaseEnvironment):
             self._is_done = True
 
     def display(self) -> None:
-        from rlearn.display.display_grid import render_grid_world
+        from reinfo.display.display_grid import render_grid_world
         render_grid_world(self.current_pos, self.size, self.terminal_states, self._is_done, self._score)
 
     def score(self) -> float:

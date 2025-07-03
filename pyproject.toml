@@ -3,7 +3,7 @@ requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "rlearn"                     
+name = "reinfo"                     
 version = "0.0.1"
 description = "Package for Reinforcement Learning"
 readme = "README.md"
@@ -25,15 +25,15 @@ test = [
 ]
 
 [project.scripts]
-rlearn = "rlearn.main:main"
+reinfo = "reinfo.main:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["rlearn", "rlearn.*"]
+include = ["reinfo", "reinfo.*"]
 
 [tool.pytest.ini_options]
 python_files = ["test_*.py", "*_test.py"]
 testpaths = ["tests"]
 
 [tool.setuptools.package-data]
-rlearn = ["py.typed"]
+reinfo = ["py.typed"]

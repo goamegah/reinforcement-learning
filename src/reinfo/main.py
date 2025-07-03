@@ -1,38 +1,38 @@
 import argparse
 import os
-from rlearn.environments.grid_world import GridWorldMDP
-from rlearn.environments.line_world import LineWorldMDP
-from rlearn.environments.montyhall_level1 import MontyHallLevel1MDP
-from rlearn.environments.montyhall_level2 import MontyHallLevel2MDP
-from rlearn.environments.rock_paper_scissors import RockPaperScissorsMDP
-from rlearn.environments.rock_paper_scissors_two_rounds import TwoRoundRPSMDP
+from reinfo.environments.grid_world import GridWorldMDP
+from reinfo.environments.line_world import LineWorldMDP
+from reinfo.environments.montyhall_level1 import MontyHallLevel1MDP
+from reinfo.environments.montyhall_level2 import MontyHallLevel2MDP
+from reinfo.environments.rock_paper_scissors import RockPaperScissorsMDP
+from reinfo.environments.rock_paper_scissors_two_rounds import TwoRoundRPSMDP
 
 # === Algorithmes ===
 
 # -- Dynamic Programming (DP)
-from rlearn.algorithms.dp.policy_iteration import policy_iteration
-from rlearn.algorithms.dp.value_iteration import value_iteration
+from reinfo.algorithms.dp.policy_iteration import policy_iteration
+from reinfo.algorithms.dp.value_iteration import value_iteration
 # -- Monte Carlo (MC)
-from rlearn.algorithms.mc.mc_on_policy import mc_on_policy_first_visit
-from rlearn.algorithms.mc.mc_off_policy import mc_off_policy_control
-from rlearn.algorithms.mc.mc_exploring_starts import mc_exploring_starts
+from reinfo.algorithms.mc.mc_on_policy import mc_on_policy_first_visit
+from reinfo.algorithms.mc.mc_off_policy import mc_off_policy_control
+from reinfo.algorithms.mc.mc_exploring_starts import mc_exploring_starts
 # -- Temporal Difference (TD)
-from rlearn.algorithms.td.q_learning import q_learning
-from rlearn.algorithms.td.sarsa import sarsa
-from rlearn.algorithms.td.expected_sarsa import expected_sarsa
+from reinfo.algorithms.td.q_learning import q_learning
+from reinfo.algorithms.td.sarsa import sarsa
+from reinfo.algorithms.td.expected_sarsa import expected_sarsa
 # -- Planning
-from rlearn.algorithms.dyna.dyna_q_plus import dyna_q_plus
-from rlearn.algorithms.dyna.dyna_q import dyna_q
+from reinfo.algorithms.pn.dyna_q_plus import dyna_q_plus
+from reinfo.algorithms.pn.dyna_q import dyna_q
 
 
 # === Utils ===
-from rlearn.utils.io_utils import (
+from reinfo.utils.io_utils import (
     save_scores,
     save_policy,
     save_q_table,
     save_values,
 )
-from rlearn.utils.plot_utils import plot_scores
+from reinfo.utils.plot_utils import plot_scores
 
 
 def get_env(name):
@@ -53,7 +53,7 @@ def main():
         choices=["grid", "line", "monty", "rps", "rps_two_rounds", "monty_level2"],
         type=str,
         help="Environnement à utiliser",
-        default="monty_level2",
+        default="grid",
         #required=True
     )
     parser.add_argument(

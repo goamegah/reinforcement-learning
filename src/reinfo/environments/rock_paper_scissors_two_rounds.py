@@ -1,7 +1,7 @@
 
 # rlearn/environments/rock_paper_scissors_two_rounds.py
 import numpy as np
-from rlearn.environments.base_environment import BaseEnvironment
+from reinfo.environments.base_environment import BaseEnvironment
 
 class TwoRoundRPSMDP(BaseEnvironment):
     def __init__(self):
@@ -88,7 +88,7 @@ class TwoRoundRPSMDP(BaseEnvironment):
             self._is_done = True
 
     def display(self) -> None:
-        from rlearn.display.display_rps import render_rps_sequence
+        from reinfo.display.display_rps import render_rps_sequence
         render_rps_sequence(self.player_moves, self.opponent_moves, self._score)
 
     def score(self) -> float:

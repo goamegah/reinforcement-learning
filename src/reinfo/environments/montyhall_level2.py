@@ -1,7 +1,7 @@
 
 # rlearn/environments/montyhall_level2.py
 import numpy as np
-from rlearn.environments.base_environment import BaseEnvironment
+from reinfo.environments.base_environment import BaseEnvironment
 
 class MontyHallLevel2MDP(BaseEnvironment):
     def __init__(self, n_doors=5):
@@ -80,7 +80,7 @@ class MontyHallLevel2MDP(BaseEnvironment):
             self._is_done = True
 
     def display(self) -> None:
-        from rlearn.display.display_monty import render_montyhall_level2_final
+        from reinfo.display.display_monty import render_montyhall_level2_final
         render_montyhall_level2_final(
             remaining_doors=self.remaining_doors,
             choice_history=self.choice_history,
