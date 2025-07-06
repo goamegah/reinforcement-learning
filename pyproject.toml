@@ -3,7 +3,7 @@ requires = ["setuptools>=64", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "reinfo"                     
+name = "reinfolearn"                     
 version = "0.0.1"
 description = "Package for Reinforcement Learning"
 readme = "README.md"
@@ -11,7 +11,9 @@ requires-python = ">=3.11"
 authors = [{name = "Godwin AMEGAH", email = "komlan.godwin.amegah@gmail.com"}]
 dependencies = [
     "pandas",
-    "numpy"
+    "numpy",
+    "tqdm",
+    "matplotlib",
 ]
 
 [project.optional-dependencies]
@@ -25,15 +27,15 @@ test = [
 ]
 
 [project.scripts]
-reinfo = "reinfo.main:main"
+reinfolearn = "reinfolearn.main:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-include = ["reinfo", "reinfo.*"]
+include = ["reinfolearn", "reinfolearn.*"]
 
 [tool.pytest.ini_options]
 python_files = ["test_*.py", "*_test.py"]
 testpaths = ["tests"]
 
 [tool.setuptools.package-data]
-reinfo = ["py.typed"]
+reinfolearn = ["py.typed"]
