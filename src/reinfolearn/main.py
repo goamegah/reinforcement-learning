@@ -1,5 +1,8 @@
 import argparse
 import os
+import sys
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from reinfolearn.environment.grid_world import GridWorldMDP
 from reinfolearn.environment.line_world import LineWorldMDP
 from reinfolearn.environment.montyhall_level1 import MontyHallLevel1MDP
@@ -45,6 +48,20 @@ def get_env(name):
         "rps_two_rounds": TwoRoundRPSMDP(),
     }[name]
 
+def play_policy_step_by_step(env, policy):
+    env.reset()
+    env.display()  
+
+    while not env.is_game_over():
+        state = env.state_id()
+        action = policy[state]
+        print(f"État courant: {state}, Action choisie: {action}")
+        env.step(action)
+        env.display()  
+        input("Appuyez sur Entrée pour passer à l'action suivante...")
+
+    print(f"Fin de la partie. Score final : {env.score()}")
+
 
 def main():
     parser = argparse.ArgumentParser(description="Run RL algorithm")
@@ -80,7 +97,7 @@ def main():
     os.makedirs(out_dir, exist_ok=True)
 
     if args.algo == "policy_iteration":
-        policy, V, scores = policy_iteration(env, gamma=args.gamma)
+        policy, V, scores = policy_iteration(env, gamma=args.gamma,verbose=True)
         save_policy(policy, f"{out_dir}/policy.json")
         save_values(V, f"{out_dir}/values.npy")
         save_scores(scores, f"{out_dir}/scores.npy")
@@ -171,6 +188,10 @@ def main():
         plot_scores(scores, title="Dyna-Q+")
 
     print("[OK] Terminé. Résultats enregistrés dans :", out_dir)
+    play = input("Voulez-vous dérouler la politique apprise pas à pas ? (o/n) ")
+    if play.lower() == 'o':
+        play_policy_step_by_step(env, policy)
+
 
 
 if __name__ == "__main__":

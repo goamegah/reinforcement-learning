@@ -34,6 +34,7 @@ def policy_iteration(env, gamma=0.99, theta=1e-6, max_iterations=1000, verbose=F
     """
     policy = np.zeros(env.num_states(), dtype=int)  # politique initiale aléatoire (0 partout)
     V = np.zeros(env.num_states())
+    
     scores = []
 
     for i in tqdm(range(max_iterations), desc="Policy Iteration"):
@@ -64,6 +65,7 @@ def policy_iteration(env, gamma=0.99, theta=1e-6, max_iterations=1000, verbose=F
             print(f"Iteration {i}: Mean V = {np.mean(V):.4f}, Policy Stable = {policy_stable}")
 
         if policy_stable:
+            print(f"✅ Policy stable trouvée à l'itération {i}")
             break
 
     return policy, V, scores
