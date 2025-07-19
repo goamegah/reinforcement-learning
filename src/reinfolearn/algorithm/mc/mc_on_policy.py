@@ -1,173 +1,71 @@
-# rlearn/algorithms/mc/mc_on_policy.py
-
 import numpy as np
 from collections import defaultdict
 from tqdm import tqdm
-import matplotlib.pyplot as plt
 
 def mc_on_policy_first_visit(env, gamma=0.99, nb_episodes=5000, epsilon=0.1):
     """
-    On-Policy First-Visit Monte Carlo Control (ε-soft policies).
+    Monte Carlo On-Policy First-Visit (ε-soft policy).
     
-    Implémentation pédagogique conforme à Sutton & Barto.
+    Implémentation pédagogique selon Sutton & Barto.
     
-    :param env: environnement compatible
-    :param gamma: facteur de discount
-    :param nb_episodes: nombre d'épisodes
-    :param epsilon: taux d'exploration ε
-    :return: politique optimale, Q, historique des scores
+    :param env: environnement de type MDP
+    :param gamma: facteur d'escompte
+    :param nb_episodes: nombre d'épisodes pour l'apprentissage
+    :param epsilon: taux d'exploration pour ε-greedy
+    :return: politique finale (greedy), dictionnaire Q(s,a), et scores par épisode
     """
-    Q = defaultdict(lambda: {})            # Fonction d'action-valeur
-    returns = defaultdict(list)            # Liste des retours pour moyenne
-    scores = []
+    Q = defaultdict(lambda: {})              # Fonction d'action-valeur Q(s,a)
+    returns_by_sa = defaultdict(list)        # Pour stocker tous les Gt(s,a)
+    episode_scores = []                      # Pour suivre la performance
 
-    # Initialisation : politique ε-soft (implémentée via ε-greedy à chaque update)
-    for ep in tqdm(range(nb_episodes), desc="MC On-Policy First Visit"):
+    for episode_idx in tqdm(range(nb_episodes), desc="MC On-Policy First-Visit"):
         env.reset()
-        episode = []  # Liste (s,a,r)
+        episode = []  # Liste de (state, action, reward)
 
-        # === Génération de l'épisode suivant π (ε-greedy) ===
+        # === Génération de l'épisode selon π ε-greedy ===
         while not env.is_game_over():
-            s = env.state_id()
+            state = env.state_id()
             actions = env.available_actions()
 
-            # ε-greedy policy π
-            if s in Q and len(Q[s]) > 0:
-                q_vals = np.array([Q[s].get(a_, 0.0) for a_ in actions])
-                best_a = actions[np.argmax(q_vals)]
+            # Politique ε-greedy à partir de Q(s,a)
+            if Q[state]:
+                q_values = np.array([Q[state].get(a_, 0.0) for a_ in actions])
+                best_action = actions[np.argmax(q_values)]
                 probs = np.ones(len(actions)) * (epsilon / len(actions))
-                probs[np.argmax(q_vals)] += (1 - epsilon)
-                a = np.random.choice(actions, p=probs)
+                probs[np.argmax(q_values)] += (1 - epsilon)
+                action = np.random.choice(actions, p=probs)
             else:
-                a = np.random.choice(actions)
+                action = np.random.choice(actions)
 
-            # === Reward immédiate (via MDP) ===
-            r = 0.0
-            s_next = None
-            env.step(a)
-            s_next = env.state_id()
+            # Calcul du reward attendu (selon les probas du MDP)
+            reward = 0.0
+            env.step(action)
+            next_state = env.state_id()
             for r_idx in range(env.num_rewards()):
-                r += env.p(s, a, s_next, r_idx) * env.reward(r_idx)
+                reward += env.p(state, action, next_state, r_idx) * env.reward(r_idx)
 
-            episode.append((s, a, r))
+            episode.append((state, action, reward))
 
-        # === Backward First-Visit MC update ===
+        # === Mise à jour First-Visit MC (à rebours) ===
         G = 0.0
-        visited_sa = set()
+        visited_state_actions = set()
         for t in reversed(range(len(episode))):
-            s, a, r = episode[t]
-            G = gamma * G + r
+            state_t, action_t, reward_t = episode[t]
+            G = gamma * G + reward_t
+            if (state_t, action_t) not in visited_state_actions:
+                returns_by_sa[(state_t, action_t)].append(G)
+                Q[state_t][action_t] = np.mean(returns_by_sa[(state_t, action_t)])
+                visited_state_actions.add((state_t, action_t))
 
-            # First-visit : mise à jour uniquement si première visite du (s,a)
-            if (s, a) not in visited_sa:
-                returns[(s, a)].append(G)
-                Q[s][a] = np.mean(returns[(s, a)])
-                visited_sa.add((s, a))
+        # Enregistrement du score final de l'épisode
+        episode_scores.append(env.score())
 
-        # === Politique π mise à jour pour être ε-soft greedy sur Q ===
-        for s in Q:
-            actions = list(Q[s].keys())
-            q_vals = np.array([Q[s][a] for a in actions])
-            best_a = actions[np.argmax(q_vals)]
-            pi_s = {}
-            for a in actions:
-                if a == best_a:
-                    pi_s[a] = 1 - epsilon + (epsilon / len(actions))
-                else:
-                    pi_s[a] = epsilon / len(actions)
-            # Politique stockée si besoin (ici non utilisée directement)
-        
-        # Score de l'épisode (utile pour suivi convergence)
-        scores.append(env.score())
-
-    # === Politique finale greedy extraite de Q ===
-    policy = np.zeros(env.num_states(), dtype=int)
+    # === Politique finale déterministe extraite de Q (greedy) ===
+    learned_policy = np.zeros(env.num_states(), dtype=int)
     for s in range(env.num_states()):
-        if s in Q and Q[s]:
-            policy[s] = max(Q[s], key=Q[s].get)
+        if Q[s]:
+            learned_policy[s] = max(Q[s], key=Q[s].get)
         else:
-            policy[s] = 0
+            learned_policy[s] = 0
 
-    return policy, Q, scores
-
-
-
-
-# def mc_on_policy_first_visit(env, gamma=0.99, nb_episodes=5000, epsilon=0.1):
-#     """
-#     Monte Carlo On-Policy First-Visit avec epsilon-greedy et discount gamma
-#     :param env: environnement compatible
-#     :param gamma: facteur de discount
-#     :param nb_episodes: nombre d'épisodes à exécuter
-#     :param epsilon: exploration aléatoire (ε-greedy)
-#     :return: politique apprise, Q, historique des scores
-#     """
-#     Q = defaultdict(lambda: {})  # Q[s][a]
-#     returns = defaultdict(list)
-#     scores = []
-
-#     for ep in tqdm(range(nb_episodes), desc="MC On-Policy First Visit"):
-#         env.reset()
-#         episode = []  # (s, a, r)
-#         visited = set()
-
-#         while not env.is_game_over():
-#             s = env.state_id()
-#             actions = env.available_actions()
-
-#             # ε-greedy
-#             if s in Q and len(Q[s]) > 0:
-#                 if np.random.rand() < epsilon:
-#                     a = np.random.choice(actions)
-#                 else:
-#                     q_vals = np.array([Q[s].get(a_, 0.0) for a_ in actions])
-#                     a = actions[np.argmax(q_vals)]
-#             else:
-#                 a = np.random.choice(actions)
-
-#             episode.append((s, a))
-#             env.step(a)
-
-#         # @@ Calcul du retour G avec discount
-#         G = 0.0
-#         visited = set()
-#         for t in reversed(range(len(episode))):
-#             s, a = episode[t]
-#             reward = 0.0
-#             if t == len(episode) - 1:
-#                 reward = env.score()
-#             G = gamma * G + reward
-
-#             if (s, a) not in visited:
-#                 if a not in Q[s]:
-#                     Q[s][a] = 0.0
-#                 returns[(s, a)].append(G)
-#                 Q[s][a] = np.mean(returns[(s, a)])
-#                 visited.add((s, a))
-
-#         scores.append(env.score())
-
-#     # Politique finale : greedy
-#     policy = np.zeros(env.num_states(), dtype=int)
-#     for s in range(env.num_states()):
-#         if s in Q and Q[s]:
-#             policy[s] = max(Q[s], key=Q[s].get)
-#         else:
-#             policy[s] = 0
-
-#     return policy, Q, scores
-
-
-# def plot_scores(scores, window=100, title="MC On-Policy First-Visit - Score moyen"):
-#     if len(scores) >= window:
-#         moving_avg = np.convolve(scores, np.ones(window)/window, mode="valid")
-#     else:
-#         moving_avg = scores
-#     plt.figure(figsize=(8, 4))
-#     plt.plot(moving_avg)
-#     plt.title(title)
-#     plt.xlabel("Épisode")
-#     plt.ylabel("Score moyen")
-#     plt.grid(True)
-#     plt.tight_layout()
-#     plt.show()
+    return learned_policy, Q, episode_scores

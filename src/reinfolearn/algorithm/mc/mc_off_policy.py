@@ -5,203 +5,118 @@ import matplotlib.pyplot as plt
 from collections import defaultdict
 from tqdm import tqdm
 
-def mc_off_policy_control(env, nb_episodes=5000, gamma=0.99, epsilon=0.1):
+def mc_off_policy_control(
+    env,
+    nb_episodes=5000,
+    gamma=0.99,
+    epsilon=0.1
+):
     """
-    Off-policy MC Control with Weighted Importance Sampling (Sutton & Barto Fig. 5.6)
-    Compatible SecretEnv0-3 (reward immediate via p*r).
-    """
-    Q = defaultdict(dict)
-    C = defaultdict(lambda: defaultdict(float))
-    scores = []
+    Contrôle Monte Carlo Off-policy avec échantillonnage par importance pondérée.
+    Apprend une politique optimale en suivant une autre politique exploratoire.
 
-    for ep in tqdm(range(nb_episodes), desc="Off-policy MC Control"):
+    :param env: Environnement MDP compatible
+    :param nb_episodes: Nombre total d'épisodes
+    :param gamma: Facteur d'actualisation
+    :param epsilon: Taux d'exploration de la politique comportementale
+    :return: politique apprise, fonction Q, historique des scores
+    """
+
+    q_values = defaultdict(dict)                          # Q(s,a)
+    cumulative_weights = defaultdict(lambda: defaultdict(float))  # C(s,a)
+    episode_scores = []                                   # Score total par épisode
+
+    for episode_idx in tqdm(range(nb_episodes), desc="Off-policy MC Control"):
         env.reset()
-        episode = []
+        episode_trajectory = []
 
-        # === Génération de l'épisode sous policy comportementale b (ε-soft) ===
+        # === Génération de l'épisode selon la politique comportementale ε-soft ===
         while not env.is_game_over():
-            s = env.state_id()
+            state = env.state_id()
             actions = env.available_actions()
 
-            # ε-soft policy
+            # Politique comportementale : ε-soft
             if np.random.rand() < epsilon:
-                a = np.random.choice(actions)
+                action = np.random.choice(actions)
             else:
-                q_vals = [Q[s].get(a_, 0.0) for a_ in actions]
+                q_vals = [q_values[state].get(a, 0.0) for a in actions]
                 max_q = max(q_vals)
-                best_actions = [a_ for a_, q in zip(actions, q_vals) if q == max_q]
-                a = np.random.choice(best_actions)
+                best_actions = [a for a, q in zip(actions, q_vals) if q == max_q]
+                action = np.random.choice(best_actions)
 
-            env.step(a)
-            episode.append((s, a))
+            env.step(action)
+            episode_trajectory.append((state, action))
 
-        scores.append(env.score())
+        episode_scores.append(env.score())  # Suivi du score de l’épisode
 
-        # === Backward update with Importance Sampling ===
-        G = 0.0
-        W = 1.0
+        # === Mise à jour rétroactive par importance sampling ===
+        G = 0.0  # retour cumulé
+        W = 1.0  # poids d'importance
 
-        for t in reversed(range(len(episode))):
-            s, a = episode[t]
+        for t in reversed(range(len(episode_trajectory))):
+            state, action = episode_trajectory[t]
 
-            # ✅ Reward immediate (MDP definition)
-            r = 0.0
-            for s_p in range(env.num_states()):
-                for r_idx in range(env.num_rewards()):
-                    p_trans = env.p(s, a, s_p, r_idx)
-                    r_val = env.reward(r_idx)
-                    r += p_trans * r_val
+            # Calcul de la récompense immédiate attendue r(s,a)
+            expected_reward = 0.0
+            for next_state in range(env.num_states()):
+                for reward_index in range(env.num_rewards()):
+                    transition_prob = env.p(state, action, next_state, reward_index)
+                    reward_value = env.reward(reward_index)
+                    expected_reward += transition_prob * reward_value
 
-            G = gamma * G + r
+            G = gamma * G + expected_reward
 
-            if a not in Q[s]:
-                Q[s][a] = 0.0
+            if action not in q_values[state]:
+                q_values[state][action] = 0.0
 
-            C[s][a] += W
-            Q[s][a] += (W / C[s][a]) * (G - Q[s][a])
+            cumulative_weights[state][action] += W
+            q_values[state][action] += (W / cumulative_weights[state][action]) * (G - q_values[state][action])
 
-            # Policy target greedy
-            pi_a = max(Q[s], key=Q[s].get)
+            # Politique cible : greedy sur Q
+            greedy_action = max(q_values[state], key=q_values[state].get)
 
-            if a != pi_a:
-                break
+            if action != greedy_action:
+                break  # on arrête l’update si la politique comportementale diverge de la politique cible
 
-            # Importance sampling ratio
-            prob_b = epsilon / len(actions)
-            if a == pi_a:
-                prob_b += (1 - epsilon)
+            # Calcul du ratio de probabilité pour importance sampling
+            prob_behavior = epsilon / len(actions)
+            if action == greedy_action:
+                prob_behavior += (1.0 - epsilon)
 
-            W *= 1.0 / prob_b
+            W *= 1.0 / prob_behavior
 
             if W == 0.0:
                 break
 
-    # === Politique finale ===
-    policy = np.zeros(env.num_states(), dtype=int)
-    for s in range(env.num_states()):
-        if s in Q and Q[s]:
-            policy[s] = max(Q[s], key=Q[s].get)
+    # === Politique finale déterministe (greedy sur Q) ===
+    learned_policy = np.zeros(env.num_states(), dtype=int)
+    for state in range(env.num_states()):
+        if state in q_values and q_values[state]:
+            learned_policy[state] = max(q_values[state], key=q_values[state].get)
         else:
-            policy[s] = 0
+            learned_policy[state] = 0  # action par défaut
 
-    return policy, Q, scores
+    return learned_policy, q_values, episode_scores
 
-def plot_scores(scores, window=100, title="Off-policy MC Control - Score moyen"):
-    moving_avg = np.convolve(scores, np.ones(window)/window, mode="valid") if len(scores) >= window else scores
-    plt.figure(figsize=(8, 4))
+
+def plot_episode_scores(scores, window=100, title="Off-policy MC Control - Score moyen"):
+    """
+    Affiche l’évolution du score par épisode (avec lissage facultatif)
+
+    :param scores: liste des scores cumulés par épisode
+    :param window: fenêtre de moyenne glissante
+    :param title: titre du graphe
+    """
+    if len(scores) >= window:
+        moving_avg = np.convolve(scores, np.ones(window)/window, mode="valid")
+    else:
+        moving_avg = scores
+
+    plt.figure(figsize=(10, 5))
     plt.plot(moving_avg)
     plt.title(title)
     plt.xlabel("Épisode")
-    plt.ylabel("Score moyen")
+    plt.ylabel("Score total moyen")
     plt.grid(True)
     plt.tight_layout()
     plt.show()
-
-
-
-
-
-
-
-
-
-
-
-# # rlearn/algorithms/mc/mc_off_policy.py
-
-# import numpy as np
-# import matplotlib.pyplot as plt
-# from collections import defaultdict
-# from tqdm import tqdm
-
-
-# def mc_off_policy_control(env, nb_episodes=5000, gamma=0.99, epsilon=0.1, weighted=True):
-#     """
-#     Contrôle Monte Carlo Hors-Politique (Off-policy) avec importance sampling.
-#     Apprend Q et en déduit une politique optimale.
-#     :param env: Environnement compatible
-#     :param nb_episodes: nombre d'épisodes à simuler
-#     :param gamma: facteur de réduction (discount)
-#     :param epsilon: exploration de la behavior policy (ε-greedy)
-#     :param weighted: True = Weighted IS, False = Ordinary IS
-#     :return: policy, Q, scores
-#     """
-#     Q = defaultdict(lambda: {})  # Q[s][a]
-#     C = defaultdict(lambda: {})  # cumul des poids W
-#     scores = []
-
-#     for _ in tqdm(range(nb_episodes), desc="MC Off-Policy"):
-#         episode = []
-#         env.reset()
-
-#         while not env.is_game_over():
-#             s = env.state_id()
-#             actions = env.available_actions()
-
-#             # ε-greedy behavior policy
-#             if s in Q and len(Q[s]) > 0:
-#                 if np.random.rand() < epsilon:
-#                     a = np.random.choice(actions)
-#                 else:
-#                     q_vals = np.array([Q[s].get(a_, 0.0) for a_ in actions])
-#                     a = actions[np.argmax(q_vals)]
-#             else:
-#                 a = np.random.choice(actions)
-
-#             episode.append((s, a))
-#             env.step(a)
-
-#         scores.append(env.score())
-
-#         # @@ Calcul du retour G avec gamma
-#         G = 0.0
-#         W = 1.0
-#         for t in reversed(range(len(episode))):
-#             s, a = episode[t]
-#             reward = 0.0
-#             if t == len(episode) - 1:
-#                 reward = env.score()
-#             G = gamma * G + reward
-
-#             if a not in Q[s]:
-#                 Q[s][a] = 0.0
-#                 C[s][a] = 0.0
-
-#             C[s][a] += W
-#             if weighted:
-#                 Q[s][a] += (W / C[s][a]) * (G - Q[s][a])
-#             else:
-#                 Q[s][a] += W * (G - Q[s][a])
-
-#             # stop si action ≠ greedy
-#             greedy_a = max(Q[s], key=Q[s].get)
-#             if a != greedy_a:
-#                 break
-
-#             prob_action = (1 - epsilon) + epsilon / len(actions)
-#             W *= 1.0 / prob_action
-
-#     # Politique finale greedy
-#     policy = np.zeros(env.num_states(), dtype=int)
-#     for s in range(env.num_states()):
-#         if s in Q and Q[s]:
-#             policy[s] = max(Q[s], key=Q[s].get)
-#         else:
-#             policy[s] = 0
-
-#     return policy, Q, scores
-
-
-# def plot_scores(scores, window=100, title="MC Off-Policy - Score moyen"):
-#     if len(scores) >= window:
-#         moving_avg = np.convolve(scores, np.ones(window)/window, mode="valid")
-#     else:
-#         moving_avg = scores
-#     plt.figure(figsize=(8, 4))
-#     plt.plot(moving_avg)
-#     plt.title(title)
-#     plt.xlabel("Épisode")
-#     plt.ylabel("Score moyen")
-#     plt.grid(True)
-#     plt.tight_layout()
-#     plt.show()
