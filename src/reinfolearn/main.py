@@ -90,10 +90,10 @@ def main():
         #required=True
     )
     parser.add_argument(
-    "--play",
-    action="store_true",
-    help="Dérouler la politique apprise sans relancer l'apprentissage"
-)
+        "--play",
+        action="store_true",
+        help="Dérouler la politique apprise sans relancer l'apprentissage"
+    )
     parser.add_argument("--episodes", type=int, default=3000)
     parser.add_argument("--gamma", type=float, default=0.99)
     parser.add_argument("--alpha", type=float, default=0.1)
