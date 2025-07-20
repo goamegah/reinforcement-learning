@@ -92,7 +92,7 @@ def main():
             policy = load_policy(f"{output_dir}/policy.json")
             play_policy_step_by_step(env, policy)
         except FileNotFoundError:
-            print("❌ Politique non trouvée. Lance l’apprentissage d’abord.")
+            print("Politique non trouvée. Lance l’apprentissage d’abord.")
             return
         
     else:
@@ -102,14 +102,14 @@ def main():
             save_policy(policy, f"{output_dir}/policy.json")
             save_values(state_values, f"{output_dir}/values.npy")
             save_scores(mean_state_values_per_iter, f"{output_dir}/value_convergence.npy")
-            plot_convergence(mean_state_values_per_iter, title="Policy Iteration - Mean V(s)", ylabel="Valeur moyenne V(s)")
+            plot_convergence(mean_state_values_per_iter, title="Policy Iteration - Mean V(s)", ylabel="Valeur moyenne V(s)", save_path=f"{output_dir}/convergence_policy_iteration.png")
 
         elif args.algo == "value_iteration":
             policy, state_values, max_delta_per_iter = value_iteration(env, gamma=args.gamma)
             save_policy(policy, f"{output_dir}/policy.json")
             save_values(state_values, f"{output_dir}/values.npy")
             save_scores(max_delta_per_iter, f"{output_dir}/delta_convergence.npy")
-            plot_convergence(max_delta_per_iter, title="Value Iteration - Max Δ", ylabel="Delta max")
+            plot_convergence(max_delta_per_iter, title="Value Iteration - Max Δ", ylabel="Delta max", save_path=f"{output_dir}/convergence_policy_iteration.png")
 
         # === Algorithmes Monte Carlo ===
         elif args.algo == "mc_on":
@@ -117,21 +117,21 @@ def main():
             save_policy(policy, f"{output_dir}/policy.json")
             save_q_table(Q, f"{output_dir}/q_table.pkl")
             save_scores(episode_scores, f"{output_dir}/episode_scores.npy")
-            plot_scores(episode_scores, title="MC On-Policy - Score par épisode")
+            plot_scores(episode_scores, title="MC On-Policy - Score par épisode", save_path=f"{output_dir}/mc_on_policy_scores.png")
 
         elif args.algo == "mc_off":
             policy, Q, total_scores_per_episode = mc_off_policy_control(env, gamma=args.gamma, epsilon=args.epsilon, nb_episodes=args.episodes)
             save_policy(policy, f"{output_dir}/policy.json")
             save_q_table(Q, f"{output_dir}/q_table.pkl")
             save_scores(total_scores_per_episode, f"{output_dir}/episode_scores.npy")
-            plot_scores(total_scores_per_episode, title="MC Off-Policy - Score par épisode")
+            plot_scores(total_scores_per_episode, title="MC Off-Policy - Score par épisode", save_path=f"{output_dir}/mc_off_policy_scores.png")
 
         elif args.algo == "mc_es":
             policy, Q, episode_scores = mc_exploring_starts(env, gamma=args.gamma, nb_episodes=args.episodes)
             save_policy(policy, f"{output_dir}/policy.json")
             save_q_table(Q, f"{output_dir}/q_table.pkl")
             save_scores(episode_scores, f"{output_dir}/episode_scores.npy")
-            plot_scores(episode_scores, title="MC Exploring Starts - Score par épisode")
+            plot_scores(episode_scores, title="MC Exploring Starts - Score par épisode", save_path=f"{output_dir}/mc_exploring_starts_scores.png")
 
         # === Algorithmes TD ===
         elif args.algo == "q_learning":
@@ -139,21 +139,21 @@ def main():
             save_policy(policy, f"{output_dir}/policy.json")
             save_q_table(Q, f"{output_dir}/q_table.pkl")
             save_scores(episode_scores, f"{output_dir}/episode_scores.npy")
-            plot_scores(episode_scores, title="Q-Learning - Score par épisode")
+            plot_scores(episode_scores, title="Q-Learning - Score par épisode", save_path=f"{output_dir}/q_learning_scores.png")
 
         elif args.algo == "sarsa":
             policy, Q, episode_scores = sarsa(env, gamma=args.gamma, alpha=args.alpha, epsilon=args.epsilon, nb_episodes=args.episodes)
             save_policy(policy, f"{output_dir}/policy.json")
             save_q_table(Q, f"{output_dir}/q_table.pkl")
             save_scores(episode_scores, f"{output_dir}/episode_scores.npy")
-            plot_scores(episode_scores, title="SARSA - Score par épisode")
+            plot_scores(episode_scores, title="SARSA - Score par épisode", save_path=f"{output_dir}/sarsa_scores.png")
 
         elif args.algo == "expected_sarsa":
             policy, Q, episode_scores = expected_sarsa(env, gamma=args.gamma, alpha=args.alpha, epsilon=args.epsilon, nb_episodes=args.episodes)
             save_policy(policy, f"{output_dir}/policy.json")
             save_q_table(Q, f"{output_dir}/q_table.pkl")
             save_scores(episode_scores, f"{output_dir}/episode_scores.npy")
-            plot_scores(episode_scores, title="Expected SARSA - Score par épisode")
+            plot_scores(episode_scores, title="Expected SARSA - Score par épisode", save_path=f"{output_dir}/expected_sarsa_scores.png")
 
         # === Algorithmes Planning ===
         elif args.algo == "dyna_q":
@@ -161,21 +161,21 @@ def main():
             save_policy(policy, f"{output_dir}/policy.json")
             save_q_table(Q, f"{output_dir}/q_table.pkl")
             save_scores(episode_scores, f"{output_dir}/episode_scores.npy")
-            plot_scores(episode_scores, title="Dyna-Q - Score par épisode")
+            plot_scores(episode_scores, title="Dyna-Q - Score par épisode", save_path=f"{output_dir}/dyna_q_scores.png")
 
         elif args.algo == "dyna_q_plus":
             policy, Q, episode_scores = dyna_q_plus(env, gamma=args.gamma, alpha=args.alpha, epsilon=args.epsilon, nb_episodes=args.episodes)
             save_policy(policy, f"{output_dir}/policy.json")
             save_q_table(Q, f"{output_dir}/q_table.pkl")
             save_scores(episode_scores, f"{output_dir}/episode_scores.npy")
-            plot_scores(episode_scores, title="Dyna-Q+ - Score par épisode")
+            plot_scores(episode_scores, title="Dyna-Q+ - Score par épisode", save_path=f"{output_dir}/dyna_q_plus_scores.png")
 
         # Résumé des performances
         if "episode_scores" in locals():
-            print(f"[📊] Moyenne des scores sur {args.episodes} épisodes : {np.mean(episode_scores):.2f}")
-            print(f"[⬆️] Score max : {np.max(episode_scores)} | [⬇️] Score min : {np.min(episode_scores)}")
+            print(f"Moyenne des scores sur {args.episodes} épisodes : {np.mean(episode_scores):.2f}")
+            print(f"Score max : {np.max(episode_scores)} | Score min : {np.min(episode_scores)}")
 
-        print(f"[✅] Apprentissage terminé. Résultats disponibles dans : {output_dir}")
+        print(f"Apprentissage terminé. Résultats disponibles dans : {output_dir}")
 
 
 if __name__ == "__main__":

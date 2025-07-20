@@ -7,6 +7,8 @@ import pandas as pd
 # import plotly.graph_objects as go
 
 
+import matplotlib.pyplot as plt
+
 def plot_convergence(values, title="Convergence", ylabel="Value", save_path=None):
     plt.figure(figsize=(8, 4))
     plt.plot(values)
@@ -17,6 +19,7 @@ def plot_convergence(values, title="Convergence", ylabel="Value", save_path=None
     plt.tight_layout()
     if save_path:
         plt.savefig(save_path)
+        print(f"Figure sauvegardée : {save_path}")
     plt.show()
 
 def plot_scores(scores, title="Score par épisode", save_path=None):
@@ -29,7 +32,9 @@ def plot_scores(scores, title="Score par épisode", save_path=None):
     plt.tight_layout()
     if save_path:
         plt.savefig(save_path)
+        print(f" Figure sauvegardée : {save_path}")
     plt.show()
+
 
 
 # def plot_scores(scores, title="Courbe de scores", ylabel="Score"):
