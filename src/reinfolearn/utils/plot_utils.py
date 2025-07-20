@@ -89,3 +89,17 @@ def plot_vi_convergence(delta_history, mean_value_history):
     fig.tight_layout()
     plt.grid(True)
     plt.show()
+    
+    
+def plot_scores_mavg(scores, window=100, title="Score moyen"):
+    moving_avg = np.convolve(scores, np.ones(window)/window, mode="valid")
+    plt.figure(figsize=(8, 4))
+    plt.plot(moving_avg)
+    plt.title(title)
+    plt.xlabel("Épisodes")
+    plt.ylabel("Score moyen")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+    
+    
