@@ -58,13 +58,12 @@ class TwoRoundRPS(BaseEnvironment):
             return 1 + 3 * agent_a1 + opp_a1
 
     def display(self) -> None:
-        print(f"Round: {self.round}")
+        print(f"\nRound: {self.round}")
         agent_display = [self.action_meanings[a] for a in self.agent_actions]
         opp_display = [self.action_meanings[a] for a in self.opponent_actions]
         print(f"Agent: {agent_display}")
         print(f"Opponent: {opp_display}")
-        print(f"Score: {self._score}")
-        print()
+        print(f"Score: {self._score}\n")
 
     def is_forbidden(self, action: int) -> int:
         return 0 if action in self.actions else 1
@@ -103,23 +102,34 @@ class TwoRoundRPS(BaseEnvironment):
 
     def score(self) -> float:
         return self._score
-        
 
 
-# --- MAIN de test ---
+# === INTERACTIVE TEST ===
 if __name__ == "__main__":
     env = TwoRoundRPS()
-    NUM_EPISODES = 5
+    NUM_EPISODES = 1
 
     for ep in range(NUM_EPISODES):
-        print(f"Episode {ep + 1}")
+        print(f"\n=== Épisode {ep + 1} ===")
         env.reset()
         while not env.is_game_over():
             state = env.state_id()
             actions = env.available_actions()
-            action = random.choice(actions)
-            print(f"State: {state} | Action chosen: {action} ({env.action_meanings[action]})")
+            print(f"État courant : {state}")
+            while True:
+                try:
+                    print("Actions possibles :")
+                    for a in actions:
+                        print(f"  {a} = {env.action_meanings[a]}")
+                    action = int(input("Choisissez votre action (0/1/2) : "))
+                    if env.is_forbidden(action):
+                        print("Action invalide. Essayez encore.")
+                        continue
+                    break
+                except ValueError:
+                    print("Entrée invalide. Entrez un nombre entre 0 et 2.")
             env.step(action)
             env.display()
-        print(f"Final score: {env.score()}")
-        print("-" * 30)
+
+        print(f"Score final : {env.score()}")
+        print("-" * 40)
