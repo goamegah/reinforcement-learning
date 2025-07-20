@@ -72,7 +72,7 @@ def main():
             "q_learning", "sarsa", "expected_sarsa",
             "dyna_q", "dyna_q_plus"
         ], 
-        default="mc_on"
+        default="expected_sarsa"
     )
     parser.add_argument("--play", action="store_true", help="Exécuter une politique déjà apprise")
     parser.add_argument("--episodes", type=int, default=1000)

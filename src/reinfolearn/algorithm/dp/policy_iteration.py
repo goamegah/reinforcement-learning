@@ -22,6 +22,7 @@ def policy_evaluation(env, policy, gamma=0.99, theta=1e-6):
             break
     return V, delta_history
 
+
 def policy_iteration(env, gamma=0.99, theta=1e-6, max_iterations=1000, verbose=False):
     policy = np.zeros(env.num_states(), dtype=int)
     V = np.zeros(env.num_states())
@@ -50,7 +51,6 @@ def policy_iteration(env, gamma=0.99, theta=1e-6, max_iterations=1000, verbose=F
             print(f"Iteration {i}: Mean V = {np.mean(V):.4f}, Policy Stable = {policy_stable}")
 
         if policy_stable:
-            print(f"✅ Policy stable trouvée à l'itération {i}")
             break
 
     return policy, V, mean_value_history

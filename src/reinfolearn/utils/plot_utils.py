@@ -7,8 +7,6 @@ import pandas as pd
 # import plotly.graph_objects as go
 
 
-import matplotlib.pyplot as plt
-
 def plot_convergence(values, title="Convergence", ylabel="Value", save_path=None):
     plt.figure(figsize=(8, 4))
     plt.plot(values)
@@ -37,108 +35,57 @@ def plot_scores(scores, title="Score par épisode", save_path=None):
 
 
 
-# def plot_scores(scores, title="Courbe de scores", ylabel="Score"):
-#     plt.figure(figsize=(8, 4))
-#     plt.plot(scores)
-#     plt.title(title)
-#     plt.xlabel("Itération" if "V" in title or "convergence" in title.lower() else "Épisode")
-#     plt.ylabel(ylabel)
-#     plt.grid(True)
-#     plt.tight_layout()
-#     plt.show()
+def plot_episode_scores(scores, window=100, title="Scores par épisode"):
+    """
+    Affiche la moyenne glissante des scores par épisode.
+    """
+    if len(scores) >= window:
+        moving_avg = np.convolve(scores, np.ones(window) / window, mode="valid")
+    else:
+        moving_avg = scores
+
+    plt.figure(figsize=(10, 4))
+    plt.plot(moving_avg, label="Score moyen")
+    plt.title(title)
+    plt.xlabel("Épisode")
+    plt.ylabel("Score")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.legend()
+    plt.show()
 
 
-# def plot_scores(scores, window=10, title="Performance", save=False, save_path=None):
-#     scores = np.array(scores)
-#     if len(scores) == 0:
-#         print("[WARN] Aucun score à afficher.")
-#         return
-
-#     if len(scores) >= window and window > 1:
-#         moving_avg = np.convolve(scores, np.ones(window)/window, mode="valid")
-#     else:
-#         moving_avg = scores
-
-#     plt.figure(figsize=(8, 4))
-#     plt.plot(moving_avg)
-#     plt.title(title + f" (window={window})")
-#     plt.xlabel("Épisode")
-#     plt.ylabel("Score moyen")
-#     plt.grid(True)
-#     plt.tight_layout()
-
-#     if save:
-#         if save_path is None:
-#             save_path = f"{title.lower().replace(' ', '_')}.png"
-#         os.makedirs(os.path.dirname(save_path), exist_ok=True)
-#         plt.savefig(save_path)
-#         plt.close()
-#         print(f"[OK] Graphique enregistré : {save_path}")
-#     else:
-#         plt.show()
+def plot_delta_history(delta_history, title="Convergence (delta max)"):
+    """
+    Affiche la variation max entre deux itérations (pour VI ou PE).
+    """
+    plt.figure(figsize=(10, 4))
+    plt.plot(delta_history, label="Delta max")
+    plt.title(title)
+    plt.xlabel("Itération")
+    plt.ylabel("Variation max (delta)")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.legend()
+    plt.show()
 
 
-# def plot_scores_overlay(scores, window=10, title="Performance"):
-#     plt.figure(figsize=(10, 5))
-#     episodes = np.arange(len(scores))
-    
-#     plt.plot(episodes, scores, alpha=0.3, label="Score brut")
+def plot_vi_convergence(delta_history, mean_value_history):
+    """
+    Courbe double : delta max et moyenne des valeurs de V(s).
+    """
+    fig, ax1 = plt.subplots(figsize=(10, 4))
+    ax1.plot(delta_history, label="Max Δ V", color="blue")
+    ax1.set_xlabel("Itération")
+    ax1.set_ylabel("Δ V", color="blue")
+    ax1.tick_params(axis='y', labelcolor='blue')
 
-#     if len(scores) >= window:
-#         moving_avg = np.convolve(scores, np.ones(window)/window, mode="valid")
-#         plt.plot(episodes[:len(moving_avg)], moving_avg, color="orange", label=f"Moyenne mobile (window={window})")
-    
-#     plt.title(title + " (Overlay)")
-#     plt.xlabel("Épisode")
-#     plt.ylabel("Score")
-#     plt.legend()
-#     plt.grid(True)
-#     plt.tight_layout()
-#     plt.show()
+    ax2 = ax1.twinx()
+    ax2.plot(mean_value_history, label="Moyenne V", color="green", linestyle="--")
+    ax2.set_ylabel("Valeur moyenne V", color="green")
+    ax2.tick_params(axis='y', labelcolor='green')
 
-
-# def plot_scores_boxplot(scores, step=100, title="Distribution des scores"):
-#     scores = np.array(scores)
-#     num_steps = len(scores) // step
-#     data = [scores[i*step:(i+1)*step] for i in range(num_steps)]
-    
-#     plt.figure(figsize=(12, 5))
-#     plt.boxplot(data, positions=np.arange(num_steps)*step)
-#     plt.title(title + f" (boxplot every {step} episodes)")
-#     plt.xlabel("Épisode")
-#     plt.ylabel("Score")
-#     plt.grid(True)
-#     plt.tight_layout()
-#     plt.show()
-
-
-# def plot_scores_with_std(scores, window=100, title="Performance (mean ± std)"):
-#     df = pd.DataFrame(scores, columns=["score"])
-#     rolling = df["score"].rolling(window)
-#     mean = rolling.mean()
-#     std = rolling.std()
-
-#     plt.figure(figsize=(10, 5))
-#     plt.plot(mean, label="Moyenne mobile")
-#     plt.fill_between(mean.index, mean - std, mean + std, color="orange", alpha=0.3, label="±1 std")
-#     plt.title(title)
-#     plt.xlabel("Épisode")
-#     plt.ylabel("Score")
-#     plt.legend()
-#     plt.grid(True)
-#     plt.tight_layout()
-#     plt.show()
-
-
-# def plot_scores_interactive(scores, window=100, title="Performance (Interactive)"):
-#     episodes = np.arange(len(scores))
-#     fig = go.Figure()
-#     fig.add_trace(go.Scatter(x=episodes, y=scores, mode='lines', name='Score brut', opacity=0.3))
-    
-#     if len(scores) >= window:
-#         moving_avg = np.convolve(scores, np.ones(window)/window, mode="valid")
-#         fig.add_trace(go.Scatter(x=episodes[:len(moving_avg)], y=moving_avg, mode='lines', name=f"Moyenne mobile ({window})"))
-    
-#     fig.update_layout(title=title, xaxis_title="Épisode", yaxis_title="Score", template="plotly_white")
-#     fig.show()
-
+    fig.suptitle("Convergence de Value Iteration")
+    fig.tight_layout()
+    plt.grid(True)
+    plt.show()
