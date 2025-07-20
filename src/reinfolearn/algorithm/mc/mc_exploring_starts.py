@@ -69,22 +69,3 @@ def mc_exploring_starts(env, gamma=0.99, nb_episodes=5000):
             policy[s] = 0  # Action par défaut
 
     return policy, q_table, episode_scores
-
-
-def plot_scores(scores, window=100, title="MC Exploring Starts - Score moyen par épisode"):
-    """
-    Affiche la moyenne glissante des scores.
-    """
-    if len(scores) >= window:
-        moving_avg = np.convolve(scores, np.ones(window) / window, mode="valid")
-    else:
-        moving_avg = scores
-
-    plt.figure(figsize=(8, 4))
-    plt.plot(moving_avg)
-    plt.title(title)
-    plt.xlabel("Épisode")
-    plt.ylabel("Score moyen")
-    plt.grid(True)
-    plt.tight_layout()
-    plt.show()
