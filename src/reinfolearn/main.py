@@ -161,11 +161,11 @@ def main():
 
 
         elif args.algo == "mc_off":
-            policy, Q, total_scores_per_episode = mc_off_policy_control(env, gamma=args.gamma, epsilon=args.epsilon, nb_episodes=args.episodes)
+            policy, Q, episode_scores = mc_off_policy_control(env, gamma=args.gamma, epsilon=args.epsilon, nb_episodes=args.episodes)
             save_policy(policy, f"{output_dir}/policy.json")
             save_q_table(Q, f"{output_dir}/q_table.pkl")
-            save_scores(total_scores_per_episode, f"{output_dir}/episode_scores.npy")
-            plot_scores(total_scores_per_episode, title="MC Off-Policy - Score par épisode", save_path=f"{output_dir}/mc_off_policy_scores.png")
+            save_scores(episode_scores, f"{output_dir}/episode_scores.npy")
+            plot_scores(episode_scores, title="MC Off-Policy - Score par épisode", save_path=f"{output_dir}/mc_off_policy_scores.png")
 
         elif args.algo == "mc_es":
             policy, Q, episode_scores = mc_exploring_starts(env, gamma=args.gamma, nb_episodes=args.episodes)
