@@ -56,10 +56,10 @@ def run_experiment(env_class, algo_fn, algo_name, env_name, **kwargs):
 
 Les expérimentations sont réalisées sur quatre environnements secrets :
 
-1. **SecretEnv0** : 16 états, 4 actions, 3 récompenses distinctes
-2. **SecretEnv1** : 64 états, 4 actions, 3 récompenses distinctes
-3. **SecretEnv2** : 100 états, 4 actions, 3 récompenses distinctes
-4. **SecretEnv3** : 81 états, 4 actions, 3 récompenses distinctes
+1. **SecretEnv0** : 8192 états, 3 actions, 3 récompenses distinctes (-1.0, 0.0, 1.0)
+2. **SecretEnv1** : 65536 états, 3 actions, 3 récompenses distinctes (-1.0, 0.0, 1.0)
+3. **SecretEnv2** : 2097152 états, 3 actions, 3 récompenses distinctes (-1.0, 0.0, 1.0)
+4. **SecretEnv3** : 65536 états, 3 actions, 3 récompenses distinctes (-1.0, 0.0, 1.0)
 
 Ces environnements sont accessibles via des wrappers dans le module `experiments.secret_envs_wrapper`.
 

@@ -108,30 +108,42 @@ Le framework inclut également des environnements "secrets" utilisés pour les e
 ### SecretEnv0
 
 Un environnement secret avec les caractéristiques suivantes:
-- États: 16
-- Actions: 4
+- États: 8192
+- Actions: 3
 - Récompenses: 3 valeurs distinctes
+  - Reward[0] = -1.0
+  - Reward[1] = 0.0
+  - Reward[2] = 1.0
 
 ### SecretEnv1
 
 Un environnement secret avec les caractéristiques suivantes:
-- États: 64
-- Actions: 4
+- États: 65536
+- Actions: 3
 - Récompenses: 3 valeurs distinctes
+  - Reward[0] = -1.0
+  - Reward[1] = 0.0
+  - Reward[2] = 1.0
 
 ### SecretEnv2
 
 Un environnement secret avec les caractéristiques suivantes:
-- États: 100
-- Actions: 4
+- États: 2097152
+- Actions: 3
 - Récompenses: 3 valeurs distinctes
+  - Reward[0] = -1.0
+  - Reward[1] = 0.0
+  - Reward[2] = 1.0
 
 ### SecretEnv3
 
 Un environnement secret avec les caractéristiques suivantes:
-- États: 81
-- Actions: 4
+- États: 65536
+- Actions: 3
 - Récompenses: 3 valeurs distinctes
+  - Reward[0] = -1.0
+  - Reward[1] = 0.0
+  - Reward[2] = 1.0
 
 ## Utilisation des environnements
 
