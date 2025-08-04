@@ -72,7 +72,7 @@ def main():
         ], 
         default="policy_iteration"
     )
-    parser.add_argument("--play", action="store_true", help="Exécuter une politique déjà apprise")
+    parser.add_argument("--play" , action="store_true", help="Exécuter une politique déjà apprise")
     parser.add_argument("--load", action="store_true", help="Charger et afficher les résultats sauvegardés")
 
     parser.add_argument("--episodes", type=int, default=1000)
@@ -82,7 +82,7 @@ def main():
     args = parser.parse_args()
 
     env = get_env(args.env)
-    print(f"[ℹ️] Environnement : {args.env} | Algorithme : {args.algo}")
+    print(f"[!] Environnement : {args.env} | Algorithme : {args.algo}")
 
     output_dir = f"outputs/{args.env}/{args.algo}"
     os.makedirs(output_dir, exist_ok=True)
