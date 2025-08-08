@@ -165,10 +165,10 @@ def main():
 
         # Résumé des performances
         if "episode_scores" in locals():
-            print(f"[📊] Moyenne des scores sur {args.episodes} épisodes : {np.mean(episode_scores):.2f}")
-            print(f"[⬆️] Score max : {np.max(episode_scores)} | [⬇️] Score min : {np.min(episode_scores)}")
+            print(f"[Moyenne des scores sur {args.episodes} épisodes : {np.mean(episode_scores):.2f}")
+            print(f"[Score max : {np.max(episode_scores)} | [Score min : {np.min(episode_scores)}")
 
-        print(f"[✅] Apprentissage terminé. Résultats disponibles dans : {output_dir}")
+        print(f"Apprentissage terminé. Résultats disponibles dans : {output_dir}")
 
 
 if __name__ == "__main__":
