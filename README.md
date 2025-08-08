@@ -8,7 +8,7 @@ Ce framework fournit une implémentation modulaire et extensible de plusieurs al
 
 ### Algorithmes implémentés
 
-Cette lib inclut les algorithmes suivants :
+les algorithmes implémentés:
 
 #### Programmation Dynamique (DP)
 - Policy Iteration
