@@ -1,6 +1,6 @@
-# Reinforcement Learning Framework
+# Reinforcement Learning Lib
 
-Ce projet est un framework d'apprentissage par renforcement implémentant divers algorithmes classiques et permettant de les comparer sur différents environnements.
+Ce projet est une librairie d'apprentissage par renforcement implémentant divers algorithmes classiques et permettant de les comparer sur différents environnements.
 
 ## Description
 
@@ -8,7 +8,7 @@ Ce framework fournit une implémentation modulaire et extensible de plusieurs al
 
 ### Algorithmes implémentés
 
-Le framework inclut les algorithmes suivants :
+Cette lib inclut les algorithmes suivants :
 
 #### Programmation Dynamique (DP)
 - Policy Iteration
@@ -30,7 +30,7 @@ Le framework inclut les algorithmes suivants :
 
 ### Environnements disponibles
 
-Le framework inclut plusieurs environnements pour tester les algorithmes :
+La lib inclut également plusieurs environnements pour tester les algorithmes :
 
 - GridWorld : un monde en grille 2D avec des états terminaux
 - LineWorld : un monde linéaire simple
