@@ -67,10 +67,14 @@ reinforcement-learning/
 - Python 3.8 ou supérieur
 - pip (gestionnaire de paquets Python)
 
-### Installation des dépendances
+### Installation des dépendances (Linux)
 
 ```bash
-pip install -r requirements.txt
+git clone git@github.com:goamegah/reinforcement-learning-libs.git
+cd reinforcement-learning-libs
+python -m venv rl-env
+source rl-env\bin\activate
+pip install -e .
 ```
 
 ## Utilisation
