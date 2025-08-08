@@ -5,6 +5,7 @@ Ce projet est une librairie d'apprentissage par renforcement implémentant diver
 ## Description
 
 Ce framework fournit une implémentation modulaire et extensible de plusieurs algorithmes d'apprentissage par renforcement, ainsi que des environnements pour les tester. Il est conçu pour être utilisé à des fins éducatives et de recherche, permettant de comprendre et de comparer les performances des différents algorithmes.
+Pour plus d'information consulter la [docummentation](docs/index.md).
 
 ### Algorithmes implémentés
 
