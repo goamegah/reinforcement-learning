@@ -111,7 +111,3 @@ jupyter notebook experiments/experimentation_secret_envs.ipynb
 Le projet inclut plusieurs notebooks d'expérimentation qui comparent les performances des différents algorithmes sur divers environnements. Ces expérimentations permettent de comprendre les forces et les faiblesses de chaque algorithme dans différents contextes.
 
 Les résultats des expérimentations sont sauvegardés dans le dossier `experiments/outputs/` et peuvent être analysés à l'aide des outils de visualisation fournis dans le module `reinfolearn.utils.plot_utils`.
-
-## Licence
-
-Ce projet est distribué sous licence MIT. Voir le fichier LICENSE pour plus de détails.
