@@ -43,9 +43,15 @@ def load_policy(path):
 def save_q_table(Q, path):
     """
     Sauvegarde une Q-table (dictionnaire d'état -> actions) au format pickle
+    Supporte également les tableaux numpy et autres types de données
     """
     with open(path, "wb") as f:
-        pickle.dump(dict(Q), f)
+        if hasattr(Q, 'items') or isinstance(Q, dict):
+            # Si Q est un dictionnaire ou un objet dict-like
+            pickle.dump(dict(Q), f)
+        else:
+            # Si Q est un autre type (numpy array, etc.)
+            pickle.dump(Q, f)
 
 
 def load_q_table(path):
