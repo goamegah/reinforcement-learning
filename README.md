@@ -43,12 +43,6 @@ Le framework inclut plusieurs environnements pour tester les algorithmes :
 ```
 reinforcement-learning/
 ├── assets/                  # Ressources statiques (images, etc.)
-├── examples/                # Exemples d'utilisation des algorithmes
-│   ├── algorithms/          # Exemples par type d'algorithme
-│   │   ├── dp/             # Exemples de programmation dynamique
-│   │   ├── mc/             # Exemples de méthodes Monte Carlo
-│   │   └── td/             # Exemples de méthodes TD
-│   └── analysis/           # Exemples d'analyse des résultats
 ├── experiments/             # Notebooks et scripts d'expérimentation
 │   ├── libs/               # Bibliothèques pour les environnements secrets
 │   └── outputs/            # Résultats des expérimentations
